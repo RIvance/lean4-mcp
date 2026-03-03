@@ -2,7 +2,7 @@
 
 An MCP (Model Context Protocol) server that proxies between AI agents and the Lean 4 language server. It lets agents open Lean files, check for errors, inspect proof goals, and edit documents through the standard MCP tool-calling interface.
 
-> Inspired by [@Cui Chen](https://github.com/cu1ch3n)'s [vsrocq-mcp](https://github.com/cu1ch3n/vsrocq-mcp).
+> Inspired by [vsrocq-mcp (PR#1194)](https://github.com/rocq-prover/vsrocq/pull/1194/changes), an MCP server patch for the [Rocq](https://rocq-prover.org/) prover, originally authored by [Kacper Korban](https://github.com/KacperFKorban) and available at [cu1ch3n/vsrocq-mcp](https://github.com/cu1ch3n/vsrocq-mcp).
 
 :warning: **Platform support**: Tested on Linux. Windows and macOS support is not guaranteed.
 
