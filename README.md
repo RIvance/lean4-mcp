@@ -46,33 +46,112 @@ The binary is at `target/release/lean4-mcp-proxy`.
 
 ## Usage
 
-### VS Code / Cursor
+### VS Code / Cursor Setup
 
-Add to your MCP settings:
+#### Step 1: Build the MCP Server
+
+```sh
+cargo build --release
+```
+
+The binary will be at `target/release/lean4-mcp-proxy`.
+
+#### Step 2: Configure MCP Settings
+
+**For VS Code with Cline/Roo-Cline:**
+
+1. Open VS Code settings (Cmd/Ctrl + ,)
+2. Search for "MCP" or navigate to your MCP extension settings
+3. Add the server configuration to your MCP settings file (usually `.vscode/mcp.json` or global settings):
 
 ```json
 {
   "mcpServers": {
     "lean4-mcp": {
-      "command": "/path/to/lean4-mcp-proxy",
+      "command": "/absolute/path/to/lean4-mcp-proxy",
       "args": []
     }
   }
 }
 ```
 
-Lake workspaces are auto-detected from `lakefile.lean` when you open a file. You can also set a default:
+**For Cursor:**
+
+1. Open Cursor Settings → Features → Model Context Protocol
+2. Add a new MCP server with:
+   - **Name**: `lean4-mcp`
+   - **Command**: `/absolute/path/to/lean4-mcp-proxy`
+   - **Args**: (leave empty for auto-detection)
+
+#### Step 3: Verify Installation
+
+After restarting your editor, the MCP server should appear in your MCP tools list. You can verify by:
+
+1. Opening a Lean 4 file (`.lean`)
+2. Asking your AI assistant to "list available MCP tools"
+3. You should see tools like `open_file`, `get_diagnostics`, `get_goal_state`, etc.
+
+#### Step 4: Using with Lake Projects
+
+Lake workspaces are auto-detected from `lakefile.lean` when you open a file. For a default project, use:
 
 ```json
 {
   "mcpServers": {
     "lean4-mcp": {
-      "command": "/path/to/lean4-mcp-proxy",
+      "command": "/absolute/path/to/lean4-mcp-proxy",
       "args": ["--lake-project", "/path/to/your/lake/project"]
     }
   }
 }
 ```
+
+#### Common Use Cases
+
+**Check proof goals:**
+```
+Ask your AI: "Open MyProof.lean and show me the goal state at line 42"
+```
+
+**Get diagnostics:**
+```
+Ask your AI: "Check MyTheorem.lean for errors"
+```
+
+**Edit and verify:**
+```
+Ask your AI: "Replace the sorry on line 15 with a proper proof and verify it compiles"
+```
+
+#### Troubleshooting
+
+**"lean not found" error:**
+- Ensure `lean` and `lake` are in your PATH
+- Add to your shell profile: `export PATH="$HOME/.elan/bin:$PATH"`
+- Or set environment variables in MCP config:
+  ```json
+  {
+    "mcpServers": {
+      "lean4-mcp": {
+        "command": "/path/to/lean4-mcp-proxy",
+        "args": [],
+        "env": {
+          "PATH": "/home/user/.elan/bin:/usr/bin:/bin"
+        }
+      }
+    }
+  }
+  ```
+
+**Slow responses with Mathlib:**
+- Mathlib imports can take 60+ seconds to check
+- Use longer timeouts: `get_diagnostics` with `timeout_ms: 180000`
+- Consider using cached Mathlib builds (`lake exe cache get`)
+
+**Server not appearing in tools:**
+- Check MCP extension logs for errors
+- Verify the binary path is absolute (not relative)
+- Restart your editor after configuration changes
 
 ### Environment variables
 
