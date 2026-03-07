@@ -106,53 +106,6 @@ Lake workspaces are auto-detected from `lakefile.lean` when you open a file. For
 }
 ```
 
-#### Common Use Cases
-
-**Check proof goals:**
-```
-Ask your AI: "Open MyProof.lean and show me the goal state at line 42"
-```
-
-**Get diagnostics:**
-```
-Ask your AI: "Check MyTheorem.lean for errors"
-```
-
-**Edit and verify:**
-```
-Ask your AI: "Replace the sorry on line 15 with a proper proof and verify it compiles"
-```
-
-#### Troubleshooting
-
-**"lean not found" error:**
-- Ensure `lean` and `lake` are in your PATH
-- Add to your shell profile: `export PATH="$HOME/.elan/bin:$PATH"`
-- Or set environment variables in MCP config:
-  ```json
-  {
-    "mcpServers": {
-      "lean4-mcp": {
-        "command": "/path/to/lean4-mcp-proxy",
-        "args": [],
-        "env": {
-          "PATH": "/home/user/.elan/bin:/usr/bin:/bin"
-        }
-      }
-    }
-  }
-  ```
-
-**Slow responses with Mathlib:**
-- Mathlib imports can take 60+ seconds to check
-- Use longer timeouts: `get_diagnostics` with `timeout_ms: 180000`
-- Consider using cached Mathlib builds (`lake exe cache get`)
-
-**Server not appearing in tools:**
-- Check MCP extension logs for errors
-- Verify the binary path is absolute (not relative)
-- Restart your editor after configuration changes
-
 ### Environment variables
 
 | Variable | Description |
